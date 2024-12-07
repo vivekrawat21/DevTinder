@@ -1,0 +1,21 @@
+{
+  "name": "devtinder-backend",
+  "version": "1.0.0",
+  "description": "tinder for developers",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "js",
+    "nodejs",
+    "expressjs"
+  ],
+  "author": "Vivek Rawat",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "nodemon": "^3.1.7"
+  }
+}
