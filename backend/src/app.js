@@ -16,7 +16,6 @@ app.use("/health-check", (req, res) => {
 // How to check the custom request route only.
 app.use(express.json());
 
-// get
 app.get("/user", (req, res) => {
   res.send("Hello from the get route ✋🏻");
 });
@@ -62,6 +61,29 @@ app.get("/prm/:id", (req, res) => {
   res.send(id);
 });
 
+//  passing multiple routehandlers in single routes
+app.get(
+  "/mul",
+  (req, res, next) => {
+    // 1. If there is no res then the req will go to endless loop and after some time the server will times out and response will not given
+    console.log("Route handler 1")
+    // res.send("Route handler 1");
+    next();
+  },
+  (req, res, next) => {
+    console.log("Route hadler 2");
+    // next();  Thiw will not give an error in the client side but this is not a good practice we should not send any response if we are rerouting it to the next;
+
+    // res.send("Route handler 2");
+    next();
+  },
+  (req, res, next) => {
+    console.log("Route handler 3");
+    // res.send("Route handler 3");
+    // next();  if we do this then we will get an error on client side that route not found because we are rerouting to the next route which is not available.
+    res.send("final route");
+  }
+);
 app.listen(PORT, () => {
   console.log("Server is listening to the port :", PORT);
 });
