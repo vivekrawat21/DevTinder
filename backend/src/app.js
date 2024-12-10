@@ -1,4 +1,6 @@
 const express = require("express");
+const { adminCheck } = require("./middleware/AdminCheck");
+const { isAuthenticated } = require("./middleware/UserAuthentication");
 
 const app = express();
 
@@ -37,11 +39,11 @@ app.delete("/user", (req, res) => {
 });
 
 // Regex for routing
-app.use("/*a*/", (req, res) => {
-  res.send(
-    "Hello from a regex where u can hit to url where a is present in it"
-  );
-});
+// app.use("/*a*/", (req, res) => {
+//   res.send(
+//     "Hello from a regex where u can hit to url where a is present in it"
+//   );
+// });
 
 app.use("/*sh$", (req, res) => {
   res.send("hello kush");
@@ -66,7 +68,7 @@ app.get(
   "/mul",
   (req, res, next) => {
     // 1. If there is no res then the req will go to endless loop and after some time the server will times out and response will not given
-    console.log("Route handler 1")
+    console.log("Route handler 1");
     // res.send("Route handler 1");
     next();
   },
@@ -84,6 +86,63 @@ app.get(
     res.send("final route");
   }
 );
+
+app.use("/admin", adminCheck);
+app.get("/admin", (req, res) => {
+  const data = {
+    name: "ALLname",
+    id: "00",
+  };
+  res.json(data);
+});
+
+// user authetication middleware
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  try {
+    if (!username || !password) {
+      throw new Error("Username or password is not provided");
+    }
+    res.status(200).json({
+      message: `${username} login succesfully`,
+    });
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
+});
+
+app.get("/getFriends", isAuthenticated, (req, res) => {
+  try {
+    res.status(200).json({
+      message: "You have no friends ugly mf 😭",
+    });
+  } catch (error) {
+    res.status(404).json({
+      error: error.message,
+    });
+  }
+});
+
+app.get("/h", (req, res) => {
+  throw new Error("Not a graceful");
+});
+app.use("/", (err, req, res, next) => {
+  app.use("/", (err, req, res, next) => {
+    //Check if the any error occur if we have not handled it gracefully then this route will handle defaulty
+    if (err) {
+      res.status(500).json({
+        message: err.message + " By default error handler",
+      });
+    }
+  }); //Check if the any error occur if we have not handled it gracefully then this route will handle defaulty
+  if (err) {
+    res.status(500).json({
+      message: err.message + ": Error handled by default error handler",
+    });
+  }
+});
 app.listen(PORT, () => {
   console.log("Server is listening to the port :", PORT);
 });
