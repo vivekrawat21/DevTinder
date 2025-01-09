@@ -17,8 +17,7 @@ app.use(cookieParser());
 app.post("/signup", async (req, res) => {
   try {
     validateUser(req);
-    const encryptedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = new User({ ...req.body, password: encryptedPassword });
+    const user = new User(req.body);
     const created = await user.save();
     res.status(201).json({
       message: "User created successfully",
@@ -41,14 +40,15 @@ app.get("/signin", async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
-    const result = await bcrypt.compare(password, user.password);
+    const result = await user.validatePassword(password);
     if (!result) {
       return res.status(404).json({ message: "Incorrect Password" });
     }
-    const token = jwt.sign({ _id: user._id }, "SECRET", { expiresIn: "1d" });
+    const token = await user.getJWT();
     res.cookie("token", token, {
       expires: new Date(Date.now() + 24 * 3600000),
     });
+
     res.status(200).json({ message: "User login successful" });
   } catch (error) {
     res.status(500).json({
@@ -73,7 +73,7 @@ app.get("/profile", userAuth, async (req, res) => {
 // connection-req check
 app.get("/connection-req", userAuth, (req, res) => {
   try {
-    res.json({ message: "connection request sent by"+req?.user?.firstName });
+    res.json({ message: "connection request sent by" + req?.user?.firstName });
   } catch (error) {
     res.status(500).json({
       message: "Server side error occurred",
