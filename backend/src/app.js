@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
-const requestRouter = require("./routes/request");
+const requestRouter = require("./routes/connectionRequest");
 
 const app = express();
 const PORT = 3000;
@@ -13,10 +13,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // routers
-app.use('/api/',authRouter);
-app.use('/api/',profileRouter);
-app.use('/api/',requestRouter);
-
+app.use("/api/", authRouter);
+app.use("/api/", profileRouter);
+app.use("/api/", requestRouter);
 
 // Database Connection and Server Start
 connectDb()
