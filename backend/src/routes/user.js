@@ -1,7 +1,7 @@
 const express = require("express");
 const userAuth = require("../middleware/userAuth.middleware");
 const Connection = require("../models/connections.model");
-
+const User = require("../models/user.model");
 const router = express.Router();
 const USER_SAFE_DATA = "firstName lastName photoURL";
 router.get("/user/requests/received", userAuth, async (req, res) => {
@@ -60,4 +60,37 @@ router.get("/user/connections", userAuth, async (req, res) => {
     });
   }
 });
+
+router.get("/user/feed", userAuth, async (req, res) => {
+  const loggedInUser = req.user;
+  const page = parseInt(req.query.page) || 1;
+  let limit = parseInt(req.query.limit) || 10;
+  if (limit > 50) {
+    limit = 10;
+  }
+  try {
+    const connectionRequest = await Connection.find({
+      $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
+    }).select("fromUserId , toUserId");
+    const hideUserFromFeed = new Set();
+    connectionRequest.forEach((req) => {
+      hideUserFromFeed.add(req.fromUserId);
+      hideUserFromFeed.add(req.toUserId);
+    });
+
+    const feed = await User.find({
+      _id: { $nin: Array.from(hideUserFromFeed) },
+    })
+      .select(USER_SAFE_DATA)
+      .skip((page - 1) * limit)
+      .limit(limit);
+    return res.status(200).json({ message: "feed fetched succefully", feed });
+  } catch (error) {
+    return res.status(500).json({
+      message: "server side error occured",
+      error: error,
+    });
+  }
+});
+
 module.exports = router;
