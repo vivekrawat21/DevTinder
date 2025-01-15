@@ -9,8 +9,8 @@ const userAuthSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload.user;
     },
-    logoutUser: () => {
-      return null;
+    logoutUser: (state) => {
+      state.user = null;
     },
   },
 });

@@ -1,6 +1,9 @@
+import AuthCard from "./AuthCard"
 const Login = () => {
   return (
-    <div>Login</div>
+   <div className="flex justify-center items-center">
+      <AuthCard/>
+   </div>
   )
 }
 export default Login
