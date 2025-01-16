@@ -1,7 +1,7 @@
 const Wrapper = ({ children }) => {
   return (
-    <div className="bg-base-300 min-h-screen flex justify-center ">
-      <div className="lg:w-4/5 w-[100vw]">{children}</div>
+    <div className=" min-h-screen flex justify-center ">
+      <div className="w-4/5  ">{children}</div>
     </div>
   );
 };

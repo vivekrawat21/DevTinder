@@ -1,5 +1,4 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
 const { validateUser } = require("../../utils/validateUser");
 const User = require("../models/user.model");
 
@@ -38,7 +37,7 @@ router.post("/signin", async (req, res) => {
       expires: new Date(Date.now() + 24 * 3600000),
     });
 
-    return res.status(200).json({ message: "User login successful" });
+    return res.status(200).json({ message: "User login successful", user });
   } catch (error) {
     return res.status(500).json({
       message: "Server side error occurred",
@@ -46,16 +45,17 @@ router.post("/signin", async (req, res) => {
     });
   }
 });
-
-router.post("/signout", (req, res) => {
+router.get("/signout", (req,res) => {
   try {
-    res.cookie("token", null, {
+    // Clear the authentication token
+    res.cookie("token", "", {
       expires: new Date(Date.now()),
     });
-    return res.status(200).json({ message: "User loggedout successfully" });
+    return res.status(200).json({ message: "User logged out successfully" });
+    
   } catch (error) {
     return res.status(500).json({
-      message: "Server side error occurred",
+      message: "Server-side error occurred",
       error: error.message,
     });
   }

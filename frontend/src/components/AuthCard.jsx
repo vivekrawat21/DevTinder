@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../constants/constants";
 import { useNavigate, Link } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { ColorRing } from "react-loader-spinner";
+import ThemeContext from "../contexts/ThemeContext";
+import { FaSun, FaMoon } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { setUser } from "../fetures/userAuth/userSlice";
 
 const AuthCard = () => {
+  const { toggleTheme, theme } = useContext(ThemeContext);
   const [email, setEmail] = useState("vivek@gmail.com");
   const [password, setPassword] = useState("Vivek@123");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -22,26 +28,36 @@ const AuthCard = () => {
         { withCredentials: true }
       );
 
-      toast.success(response.data.message);
-      setIsLoading(false);
+      if (response.status == 200) {
+        toast.success(response.data.message);
+        setIsLoading(false);
+        dispatch(setUser(response.data.user));
 
-      setTimeout(() => {
-        navigate("/");
-      }, 500);
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred.");
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="relative card bg-base-200 text-neutral-content w-96 mx-auto mt-16 dark:bg-gray-800">
+    <div
+      className={`relative card bg-base-200  w-96 mx-auto mt-16 transition-colors duration-300`}
+    >
       <div className="card-body items-center text-center">
-        <h2 className="card-title text-white">Welcome to dev.Tinder!</h2>
+        <span className="font-semibold text-xl">
+          Welcome to <span className="font-extrabold">dev.</span>
+          <span className="font-extrabold text-blue-400">Tinder</span>
+        </span>
+
         <form onSubmit={handleLogin} className="w-full">
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-neutral-content">Email</span>
+              <span className="label-text">Email</span>
             </label>
             <input
               type="email"
@@ -54,11 +70,11 @@ const AuthCard = () => {
           </div>
           <div className="form-control mt-4">
             <label className="label">
-              <span className="label-text text-neutral-content">Password</span>
+              <span className="label-text">Password</span>
             </label>
             <input
               type="password"
-              className="input input-bordered w-full"
+              className="input input-bordered w-fulldark:border-gray-600"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -79,7 +95,13 @@ const AuthCard = () => {
                   ariaLabel="color-ring-loading"
                   wrapperStyle={{}}
                   wrapperClass="color-ring-wrapper"
-                  colors={["#3b82f6", "#2563eb", "#1e40af", "#1d4ed8", "#3b82f6"]}
+                  colors={[
+                    "#3b82f6",
+                    "#2563eb",
+                    "#1e40af",
+                    "#1d4ed8",
+                    "#3b82f6",
+                  ]}
                 />
               ) : (
                 "Login"
@@ -87,7 +109,7 @@ const AuthCard = () => {
             </button>
           </div>
         </form>
-        <div className="mt-4 text-sm text-neutral-content">
+        <div className="mt-4 text-sm">
           <p>
             Don't have an account?{" "}
             <Link to="/signup" className="text-blue-400 hover:underline">
@@ -96,6 +118,18 @@ const AuthCard = () => {
           </p>
         </div>
       </div>
+
+      {/* Theme Toggle Button */}
+      <button
+        onClick={toggleTheme}
+        className="absolute top-4 right-4 btn btn-ghost btn-circle"
+      >
+        {theme === "dark" ? (
+          <FaSun className="text-gray-500" />
+        ) : (
+          <FaMoon className="text-white-400" />
+        )}
+      </button>
 
       {/* Toaster for react-hot-toast */}
       <Toaster position="bottom-center" reverseOrder={false} />

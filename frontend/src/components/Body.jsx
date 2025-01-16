@@ -1,39 +1,42 @@
-import { Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../fetures/userAuth/userAuthslice";
-import { useEffect, useState } from "react";
+import { setUser } from "../fetures/userAuth/userSlice";
 import { BACKEND_URL } from "../constants/constants";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Body = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userFromRedux = useSelector((state) => state.userAuth.user);
-  const [user, setUserState] = useState(userFromRedux || null);
-
+  const userFromRedux = useSelector((store) => store.user); // Redux state
   const fetchUser = async () => {
     try {
+      if(userFromRedux?.user) {
+        return;
+      }
       const res = await axios.get(`${BACKEND_URL}/profile/view`, {
         withCredentials: true,
       });
-      dispatch(setUser(res.data.user));
-      setUserState(res.data.user);
+      dispatch(setUser(res?.data?.user));
     } catch (error) {
+      if (error.status == 401) {
+        toast.error("Please login to continue");
+        navigate("/login");
+      }
       console.error("Error fetching user data:", error);
     }
   };
 
   useEffect(() => {
-    if (!userFromRedux) {
-      fetchUser();
-    } else {
-      setUserState(userFromRedux);
-    }
-  }, [userFromRedux]);
+    fetchUser();
+  }, []);
 
   return (
     <>
-      {user && <NavBar />}
+      <NavBar />
+
       <Outlet />
     </>
   );
