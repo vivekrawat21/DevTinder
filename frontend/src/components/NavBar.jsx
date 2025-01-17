@@ -3,7 +3,6 @@ import { useContext } from "react";
 import ThemeContext from "../contexts/ThemeContext";
 import { useSelector, useDispatch } from "react-redux";
 import { FaSun, FaMoon } from "react-icons/fa";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { HiUserCircle } from "react-icons/hi";
 import { logoutUser } from "../fetures/userAuth/userSlice";
 import toast from "react-hot-toast";
@@ -22,12 +21,10 @@ const NavBar = () => {
         withCredentials: true,
       });
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         toast.success(response.data.message);
         dispatch(logoutUser());
-        setTimeout(() => {
-          navigate("/login");
-        }, 500);
+        navigate("/login");
       }
     } catch (error) {
       toast.error("Network error. Please try again." + error);
@@ -35,7 +32,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="navbar bg-base-200 dark:bg-gray-800 shadow-xl mb-4 transition-colors duration-300 mt-4 max-w-7xl mx-auto rounded-lg backdrop-blur-md bg-opacity-30 ">
+    <div className="navbar bg-base-200 dark:bg-gray-800 shadow-xl mb-4 transition-colors duration-500 ease-in-out mt-4 max-w-7xl mx-auto rounded-lg backdrop-blur-md bg-opacity-30 ">
       <div className="navbar-start">
         <Link to="/" className="text-xl flex items-center space-x-2">
           <span className="font-extrabold">
@@ -44,48 +41,77 @@ const NavBar = () => {
           </span>
         </Link>
       </div>
-      <div className="navbar-center space-x-4">
-        <Link
-          to="/profile"
-          className="btn btn-ghost text-lg rounded-lg transition-all duration-300 hover:text-blue-400 hover:bg-transparent hidden sm:block "
-        >
-          Profile
-        </Link>
-        <Link
-          to="/connections"
-          className="btn btn-ghost text-lg rounded-lg transition-all duration-300 hover:text-blue-400 hover:bg-transparent hidden sm:block"
-        >
-          Connections
-        </Link>
+
+      <div className=" navbar-center flex items-center ">
+        <div className="flex items-center space-x-2">
+          <label
+            htmlFor="theme-switch"
+            className="flex items-center cursor-pointer"
+          >
+            <div
+              className={`relative w-14 h-8 rounded-full border-2 border-gray-600 dark:border-gray-400 ${
+                theme === "dark" ? "bg-gray-700" : "bg-gray-300"
+              } transition-all duration-300`}
+            >
+              {/* Sun Icon */}
+              <div
+                className={`absolute left-1 top-1 w-6 h-6 flex items-center justify-center transition-all duration-300 ${
+                  theme === "dark" ? "opacity-50" : "opacity-100"
+                }`}
+              >
+                <FaSun className="text-yellow-400" />
+              </div>
+              <div
+                className={`absolute right-1 top-1 w-6 h-6 flex items-center justify-center transition-all duration-300 ${
+                  theme === "dark" ? "opacity-100" : "opacity-50"
+                }`}
+              >
+                <FaMoon className="text-blue-500" />
+              </div>
+              <input
+                type="checkbox"
+                id="theme-switch"
+                className="hidden"
+                onChange={toggleTheme}
+                checked={theme === "dark"}
+              />
+              <div
+                className={`w-7 h-7 bg-white rounded-full absolute top-1 transition-all duration-300 ${
+                  theme === "dark" ? "transform translate-x-6" : ""
+                }`}
+              />
+            </div>
+          </label>
+        </div>
       </div>
-      <div className="navbar-end flex items-center space-x-4">
-        <button onClick={toggleTheme} className="btn btn-ghost btn-circle hidden :block">
-          {theme === "dark" ? (
-            <FaMoon className="text-gray-500 " />
-          ) : (
-            <FaSun className="text-white-400" />
-          )}
-        </button>
+
+      {/* User Profile and Logout */}
+      <div className="navbar-end flex items-center space-x-1">
         <div className="hidden lg:block">
-          welcome <span className="font-bold font-sans">{user?.firstName}</span>
+          welcome- &#123;
+          <span className="font-bold font-sans">{user?.firstName}</span>&#125;
         </div>
         <div className="dropdown">
           <button className="btn btn-ghost btn-circle avatar">
             <div className="w-10 h-10 rounded-full ring ring-primary ring-offset-2">
-              {user ? (
+              {user?.user?.photoUrl ? (
                 <img
-                  src={
-                    user?.user?.photoUrl || "https://placeimg.com/80/80/people"
-                  }
+                  src={user?.user?.photoUrl}
                   alt="user profile"
-                  className="hidden sm:block object-cover opacity-80 transition-opacity duration-300"
+                  className="object-cover opacity-80 transition-opacity duration-300"
                 />
               ) : (
                 <HiUserCircle className="w-full h-full text-gray-500" />
               )}
             </div>
           </button>
-          <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-3">
+          <ul className="dropdown-content menu p-1 shadow bg-base-100 rounded-box w-50 mt-3">
+            <li>
+              <Link to="/connections">Connections</Link>
+            </li>
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
             <li>
               <button onClick={handleLogout} className="text-red-500">
                 Logout
@@ -93,36 +119,6 @@ const NavBar = () => {
             </li>
           </ul>
         </div>
-
-        <div className="drawer sm:hidden block align-center">
-          <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content ">
-            {/* Page content here */}
-            <label
-              htmlFor="my-drawer"
-              className="btn btn-primary drawer-button block btn-ghost btn-circle avatar m-auto p-4"
-            >
-          <GiHamburgerMenu />
-            </label>
-          </div>
-          <div className="drawer-side">
-            <label
-              htmlFor="my-drawer"
-              aria-label="close sidebar"
-              className="drawer-overlay"
-            >
-            </label>
-            <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-              <li>
-                <a>Sidebar Item 1</a>
-              </li>
-              <li>
-                <a>Sidebar Item 2</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-       
       </div>
     </div>
   );

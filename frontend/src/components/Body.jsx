@@ -6,6 +6,8 @@ import { setUser } from "../fetures/userAuth/userSlice";
 import { BACKEND_URL } from "../constants/constants";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import Footer from "./Footer";
+import FloatingBanner from "./FloatingBanner";
 
 const Body = () => {
   const navigate = useNavigate();
@@ -38,6 +40,8 @@ const Body = () => {
       <NavBar />
 
       <Outlet />
+      <FloatingBanner />
+      
     </>
   );
 };
