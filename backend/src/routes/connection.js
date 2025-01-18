@@ -3,14 +3,21 @@ const User = require("../models/user.model");
 const Connection = require("../models/connections.model");
 
 const userAuth = require("../middleware/userAuth.middleware");
-const { connection } = require("mongoose");
+;
 
 const router = express.Router();
 router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
   const fromUserId = req.user._id;
   const toUserId = req.params.toUserId;
   const status = req.params.status;
+  
+
   try {
+    if (!fromUserId ||!toUserId ||!status) {
+      return res.status(400).json({
+        message: "Invalid request",
+      });
+    }
     const allowedStatus = ["interested", "ignored"];
 
     if (!allowedStatus.includes(status)) {

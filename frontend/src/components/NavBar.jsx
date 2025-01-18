@@ -2,12 +2,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import ThemeContext from "../contexts/ThemeContext";
 import { useSelector, useDispatch } from "react-redux";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon, FaHamburger } from "react-icons/fa";
 import { HiUserCircle } from "react-icons/hi";
 import { logoutUser } from "../fetures/userAuth/userSlice";
 import toast from "react-hot-toast";
 import { BACKEND_URL } from "../constants/constants";
 import axios from "axios";
+import { FaUserFriends } from "react-icons/fa";
+import { MdOutlineFeed } from "react-icons/md";
+import { CgProfile } from "react-icons/cg";
+import { TbLogout2 } from "react-icons/tb";
 
 const NavBar = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);
@@ -53,7 +57,6 @@ const NavBar = () => {
                 theme === "dark" ? "bg-gray-700" : "bg-gray-300"
               } transition-all duration-300`}
             >
-              {/* Sun Icon */}
               <div
                 className={`absolute left-1 top-1 w-6 h-6 flex items-center justify-center transition-all duration-300 ${
                   theme === "dark" ? "opacity-50" : "opacity-100"
@@ -85,14 +88,61 @@ const NavBar = () => {
         </div>
       </div>
 
-      {/* User Profile and Logout */}
       <div className="navbar-end flex items-center space-x-1">
         <div className="hidden lg:block">
           welcome- &#123;
-          <span className="font-bold font-sans">{user?.firstName}</span>&#125;
+          <span className="font-bold font-sans bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-600">
+            {user?.firstName}
+          </span>
+          &#125;
         </div>
-        <div className="dropdown">
-          <button className="btn btn-ghost btn-circle avatar">
+
+        <input
+          id="my-drawer"
+          type="checkbox"
+          className="drawer-toggle hidden"
+        />
+        <div className="drawer-content sm:hidden">
+          <label htmlFor="my-drawer">
+            <FaHamburger className="text-2xl text-gray-500" />
+          </label>
+        </div>
+        <div className="drawer-side">
+          <label
+            htmlFor="my-drawer"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
+          <ul className="menu bg-base-200 text-base-content min-h-full w-[5.7rem]  ">
+            <li className="mt-3 text-xl  cursor-pointer">
+              <Link to={"/profile"}>
+                <CgProfile className="w-10 " />
+              </Link>
+            </li>
+
+            <li className="text-xl  cursor-pointer">
+              <Link to={"/"}>
+                <MdOutlineFeed className="w-10" />
+              </Link>
+            </li>
+
+            <li className="text-lg  cursor-pointer">
+              <Link to={"/connections"}>
+                <FaUserFriends className="w-10" />
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={handleLogout}
+                className="text-red-500 text-2xl mt-5"
+              >
+                <TbLogout2 className="w-8" />
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div className="dropdown hidden sm:block">
+          <button className="btn btn-ghost btn-circle avatar  ">
             <div className="w-10 h-10 rounded-full ring ring-primary ring-offset-2">
               {user?.user?.photoUrl ? (
                 <img
@@ -105,16 +155,22 @@ const NavBar = () => {
               )}
             </div>
           </button>
-          <ul className="dropdown-content menu p-1 shadow bg-base-100 rounded-box w-50 mt-3">
+
+          <ul className="dropdown-content menu sm:p-2 rounded-box p-0 shadow-lg bg-base-100  mt-2 ">
             <li>
-              <Link to="/connections">Connections</Link>
+              <Link to="/profile">
+              <CgProfile className="inline-block" />  Profile
+              </Link>
             </li>
             <li>
-              <Link to="/profile">Profile</Link>
+              <Link to="/"><MdOutlineFeed className="inline-block"/> Feed </Link>
+            </li>
+            <li>
+              <Link to="/connections"> <FaUserFriends className="inline-block"/> Connections</Link>
             </li>
             <li>
               <button onClick={handleLogout} className="text-red-500">
-                Logout
+              <TbLogout2 className="inline-block"/>  Logout
               </button>
             </li>
           </ul>

@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../fetures/userAuth/userSlice";
 import { BACKEND_URL } from "../constants/constants";
 import { useEffect } from "react";
-import toast from "react-hot-toast";
-import Footer from "./Footer";
+import {toast} from "react-hot-toast";
 import FloatingBanner from "./FloatingBanner";
 
 const Body = () => {

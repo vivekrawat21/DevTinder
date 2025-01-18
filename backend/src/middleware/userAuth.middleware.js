@@ -18,14 +18,11 @@ const userAuth = async (req, res, next) => {
         .json({ message: "Invalid token. Please login again" });
     }
 
-
     const user = await User.findById(_id);
-    console.log(user);
 
     if (!user) {
-     throw new Error("User not found");
+      throw new Error("User not found");
     }
-  
 
     req.user = user;
     next();

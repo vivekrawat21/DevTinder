@@ -10,7 +10,7 @@ const FloatingBanner = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 p-4 rounded-lg shadow-lg flex items-center justify-between transition-all duration-300 cursor-pointer ">
+    <div className="hidden sm:fixed sm:bottom-5 sm:right-5 p-4 rounded-lg shadow-lg sm:flex items-center justify-between transition-all duration-300 cursor-pointer ">
       <Link to="https://github.com/vivekrawat21" target="_blank" rel="noopener noreferrer">
         <IoLogoGithub className="text-3xl mr-2 text-blue-400" />
       </Link>
