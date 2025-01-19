@@ -11,8 +11,8 @@ import { setUser } from "../fetures/userAuth/userSlice";
 
 const AuthCard = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);
-  const [email, setEmail] = useState("vivek@gmail.com");
-  const [password, setPassword] = useState("Vivek@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const AuthCard = () => {
 
   return (
     <div
-      className={`relative card bg-base-200  w-96 mx-auto mt-16 transition-colors duration-300`}
+      className={` mt-32 relative card bg-base-200  w-3/12 mx-auto itme transition-colors duration-300 shadow-md `}
     >
       <div className="card-body items-center text-center">
         <span className="font-semibold text-xl">
@@ -84,7 +84,7 @@ const AuthCard = () => {
           <div className="card-actions justify-center mt-4">
             <button
               type="submit"
-              className="btn btn-primary hover:bg-blue-600 transition-colors duration-300 w-full"
+              className="btn bg-blue-400 hover:bg-blue-500 text-black transition-colors duration-300 w-full"
               disabled={isLoading}
             >
               {isLoading ? (

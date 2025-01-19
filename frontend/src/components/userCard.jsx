@@ -1,8 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
-import BoyImage from "../assets/boy_9159781.png";
+import Boy from "../assets/boy_9159781.png";
+import Girl from "../assets/Girl.png";
 import { IoIosMale } from "react-icons/io";
 import { IoFemale, IoMaleFemaleOutline } from "react-icons/io5";
 import { MdCake } from "react-icons/md";
+
 
 const UserCard = ({ user, direction, onAction, showActions = true }) => {
   const variants = {
@@ -41,7 +43,7 @@ const UserCard = ({ user, direction, onAction, showActions = true }) => {
           >
             <div className="card-image flex justify-center items-center pt-4">
               <img
-                src={user?.photoUrl || BoyImage}
+                src={user?.photoUrl || (user?.gender=="male"?Boy:Girl)}
                 className="w-40 h-40 rounded-full object-cover"
                 alt="User Profile"
               />

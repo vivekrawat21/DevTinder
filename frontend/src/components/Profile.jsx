@@ -7,6 +7,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../constants/constants";
 import { setUser } from "../fetures/userAuth/userSlice";
 import Boy from "../assets/boy_9159781.png";  
+import Girl from "../assets/Girl.png"
 
 
 const Profile = () => {
@@ -108,7 +109,7 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row sm:w-5/6 w-full bg-base-200 p-6 rounded-2xl transition-all duration-300">
             <div className="flex flex-col items-center sm:w-1/3 w-full text-center sm:text-left mb-6 sm:mb-0 justify-center">
               <img
-                src={editData?.photoUrl || Boy}
+                src={editData?.photoUrl ||( editData?.gender=='male'?Boy:Girl)}
                 alt="Profile"
                 className="w-32 h-32 rounded-full mb-4 border-4 border-gray-300"
               />
@@ -121,7 +122,7 @@ const Profile = () => {
               </button>
             </div>
             <div className="flex flex-col sm:w-2/3 w-full px-4">
-              <h3 className="text-lg font-bold mb-4">Profile Details</h3>
+            <h3 className="text-xl   mb-6 font-bold font-sans bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-600">Profile Details</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <span className="text-sm text-gray-600">First Name:</span>

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import UserCard from "./userCard";
 import { BACKEND_URL } from "../constants/constants";
 import { setFeed } from "../fetures/userFeed/feedSlice";
+import {removeFromFeed} from "../fetures/userFeed/feedSlice";
+
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -29,7 +31,10 @@ const Feed = () => {
 
   const handleAction = async (action, userId) => {
     try {
-      setDirection(action); 
+      setDirection(action);
+      dispatch(removeFromFeed(userId));
+
+      console.log(feed.length); 
       await axios.post(
         `${BACKEND_URL}/request/send/${action}/${userId}`,
         {},
