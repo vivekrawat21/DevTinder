@@ -144,9 +144,9 @@ const NavBar = () => {
         <div className="dropdown hidden sm:block">
           <button className="btn btn-ghost btn-circle avatar  ">
             <div className="w-10 h-10 rounded-full ring ring-primary ring-offset-2">
-              {user?.user?.photoUrl ? (
+              {user?.photoUrl ? (
                 <img
-                  src={user?.user?.photoUrl}
+                  src={user?.photoUrl}
                   alt="user profile"
                   className="object-cover opacity-80 transition-opacity duration-300"
                 />

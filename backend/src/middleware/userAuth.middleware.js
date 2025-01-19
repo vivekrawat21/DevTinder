@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 
 const userAuth = async (req, res, next) => {
+  const USER_SAFE_DATA = "firstName lastName photoUrl gender age about skills";
   try {
     const { token } = req.cookies;
     if (!token) {
@@ -18,7 +19,7 @@ const userAuth = async (req, res, next) => {
         .json({ message: "Invalid token. Please login again" });
     }
 
-    const user = await User.findById(_id);
+    const user = await User.findById(_id).select(USER_SAFE_DATA);
 
     if (!user) {
       throw new Error("User not found");

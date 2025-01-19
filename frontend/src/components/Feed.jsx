@@ -46,16 +46,16 @@ const Feed = () => {
     }
   };
 
-  if (!feed.length) {
-    return <div>Loading feed...</div>; 
+  if (feed.length==0) {
+    return <div>No Users to display</div>; 
   }
 
   return (
     <div>
       <UserCard
-        user={feed[currentIndex]} // Current user
-        direction={direction} // Animation direction
-        onAction={handleAction} // Pass action handler
+        user={feed[currentIndex]} 
+        direction={direction} 
+        onAction={handleAction} 
       />
     </div>
   );
