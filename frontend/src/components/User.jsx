@@ -39,12 +39,12 @@ const User = () => {
 
   return (
     <div
-      className="flex m-auto sm:mt-20 mt-4  items-center flex-col sm:flex-row w-4/4 bg-base-200 p-10 rounded-2xl shadow-xl transition-all duration-300"
+      className="flex m-auto mt-10  items-center flex-col sm:flex-row w-4/4 bg-base-200 p-10 rounded-2xl shadow-xl transition-all duration-300"
       style={{ minHeight: "500px" }}
     >
       <div className="flex flex-col items-center sm:w-1/3 w-full text-center sm:text-left mb-6 sm:mb-0 justify-center">
         <img
-          src={userData?.photoUrl || (userData?.gender === "Male" ? Boy : Girl)}
+          src={userData?.photoUrl || (userData?.gender === "male" ? Boy : Girl)}
           alt="Profile"
           className="w-48 h-48 rounded-full mb-6 border-4 border-gray-300"
         />

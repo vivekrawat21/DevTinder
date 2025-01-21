@@ -30,7 +30,7 @@ const UserCard = ({ user, direction, onAction, showActions = true }) => {
       : "Others";
 
   return (
-    <div className="flex justify-center items-center mt-24">
+    <div className="flex justify-center items-center mt-16">
       <AnimatePresence>
         {user && (
           <motion.div

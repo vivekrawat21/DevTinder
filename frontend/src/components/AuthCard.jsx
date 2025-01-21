@@ -16,6 +16,8 @@ const AuthCard = ({ isSignUp = false }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [skills, setSkills] = useState([]);
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,7 +27,7 @@ const AuthCard = ({ isSignUp = false }) => {
     setIsLoading(true);
 
     const data = isSignUp
-      ? { email, password, firstName, lastName, skills }
+      ? { email, password, firstName, lastName, skills, age, gender }
       : { email, password };
 
     const endpoint = isSignUp ? "/signup" : "/signin";
@@ -36,29 +38,33 @@ const AuthCard = ({ isSignUp = false }) => {
         { withCredentials: true }
       );
 
-      if (response.status === 200) {
+      if (response.status === 200 && !isSignUp) {
         toast.success(response.data.message);
         setIsLoading(false);
         dispatch(setUser(response.data.user));
-
-        setTimeout(() => {
-          navigate("/");
-        }, 500);
+          navigate("/");       
       }
+      if (response.status === 200 && isSignUp) {
+        toast.success(response.data.message);
+        setIsLoading(false);
+        navigate("/login");
+      }
+
     } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred.");
+      toast.error(error.response?.data?.message || error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
+
   return (
     <div
-      className={`mt-${isSignUp ? "16" : "32"} relative card bg-base-200 sm:w-8/12 lg:w-${isSignUp ? "6/12" : "1/4"} mx-auto transition-colors duration-300 shadow-md rounded-2xl`}
+      className={`mt-${isSignUp ? "4" : "32"} relative card bg-base-200 sm:w-8/12 lg:w-${isSignUp ? "6/12" : "1/4"} mx-auto transition-colors duration-300 shadow-md rounded-2xl mb-8`}
     >
       <div className="card-body items-center text-center">
         <span className="font-semibold text-xl">
-          Welcome to <span className="font-extrabold">dev.</span>
+          {isSignUp ? "SignUp" : "Login"} to <span className="font-extrabold">dev.</span>
           <span className="font-extrabold bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
             Tinder
           </span>
@@ -95,6 +101,38 @@ const AuthCard = ({ isSignUp = false }) => {
                 />
               </div>
 
+              <div className="form-control mt-4">
+                <label className="label">
+                  <span className="label-text"> Age</span>
+                </label>
+                <input
+                  type="number"
+                  className="input input-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  placeholder="Enter your age"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-control mt-4">
+                <label className="label">
+                  <span className="label-text">Gender</span>
+                </label>
+                <select
+                  className="select select-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select your gender
+                  </option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="others">Others</option>
+                </select>
+              </div>
 
               <div className="form-control mt-4">
                 <label className="label">

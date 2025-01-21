@@ -102,7 +102,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen items-center px-4 py-6 mt-10">
+    <div className="flex flex-col min-h-screen items-center px-4 py-6">
       {!isEditing ? (
         <>
           <span className="invisible">Profile</span>
