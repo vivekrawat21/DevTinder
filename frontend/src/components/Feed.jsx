@@ -3,22 +3,20 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import UserCard from "./userCard";
 import { BACKEND_URL } from "../constants/constants";
-import { setFeed } from "../fetures/userFeed/feedSlice";
-import {removeFromFeed} from "../fetures/userFeed/feedSlice";
-
+import { setFeed, removeFromFeed } from "../fetures/userFeed/feedSlice";
 
 const Feed = () => {
   const dispatch = useDispatch();
-  const feed = useSelector((store) => store.feed); 
-  const [currentIndex, setCurrentIndex] = useState(0); 
-  const [direction, setDirection] = useState(null); 
+  const feed = useSelector((store) => store.feed.feed); 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(null);
 
   const fetchFeed = async () => {
-    if (feed.length > 0) return; 
     try {
       const response = await axios.get(`${BACKEND_URL}/user/feed`, {
         withCredentials: true,
       });
+      console.log(response.data.feed);
       dispatch(setFeed(response.data.feed));
     } catch (error) {
       console.error("Error fetching feed:", error.message);
@@ -27,14 +25,19 @@ const Feed = () => {
 
   useEffect(() => {
     fetchFeed();
-  }, []);
+  },[]);
 
   const handleAction = async (action, userId) => {
     try {
       setDirection(action);
-      dispatch(removeFromFeed(userId));
+      const updatedFeed = feed.filter(user => user._id !== userId); 
+      dispatch(removeFromFeed({ _id: userId }));
 
-      console.log(feed.length); 
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev >= updatedFeed.length ? 0 : prev)); 
+        setDirection(null);
+      }, 600);
+
       await axios.post(
         `${BACKEND_URL}/request/send/${action}/${userId}`,
         {},
@@ -42,25 +45,21 @@ const Feed = () => {
           withCredentials: true,
         }
       );
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % feed.length); // Move to next user
-        setDirection(null);
-      }, 600); 
     } catch (error) {
       console.error("Error sending action:", error.message);
     }
   };
 
-  if (feed.length==0) {
-    return <div>No Users to display</div>; 
+  if (feed.length === 0) {
+    return <h1 className="text-center text-3xl font-bold mt-40 ">Nothing in the feed to show ;)</h1>;
   }
 
   return (
     <div>
       <UserCard
-        user={feed[currentIndex]} 
-        direction={direction} 
-        onAction={handleAction} 
+        user={feed[currentIndex] || {}} 
+        direction={direction}
+        onAction={handleAction}
       />
     </div>
   );

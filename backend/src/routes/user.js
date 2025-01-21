@@ -3,7 +3,7 @@ const userAuth = require("../middleware/userAuth.middleware");
 const Connection = require("../models/connections.model");
 const User = require("../models/user.model");
 const router = express.Router();
-const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills";
+const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills ";
 router.get("/user/requests/received", userAuth, async (req, res) => {
   const loggedInuser = req.user;
   try {
@@ -39,23 +39,32 @@ router.get("/user/connections", userAuth, async (req, res) => {
       .populate("fromUserId", USER_SAFE_DATA)
       .populate("toUserId", USER_SAFE_DATA);
 
-    if (connections.length == 0) {
+    if (connections.length === 0) {
       return res.status(404).json({
-        message: "No connection found!!",
+        message: "No connections found!",
       });
     }
-    const connectionData = connections.map((connection) =>
-      loggedInUser.toString() === connection.fromUserId.toString()
-        ? connection.toUserId
-        : connection.fromUserId
-    );
+
+    const connectionData = connections.map((connection) => {
+      const otherUser =
+        loggedInUser.toString() === connection.fromUserId.toString()
+          ? connection.toUserId
+          : connection.fromUserId;
+
+      // Add `createdAt` to the response for each connection
+      return {
+        ...otherUser.toObject(),
+        connectionCreatedAt: new Date(connection.createdAt).toLocaleString(), // Include `createdAt`
+      };
+    });
+
     return res.status(200).json({
-      message: "connection fetched successfully",
+      message: "Connections fetched successfully",
       data: connectionData,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server side error occurred",
+      message: "Server-side error occurred",
       error: error.message,
     });
   }
@@ -63,11 +72,11 @@ router.get("/user/connections", userAuth, async (req, res) => {
 
 router.get("/user/feed", userAuth, async (req, res) => {
   const loggedInUser = req.user;
-  // const page = parseInt(req.query.page) || 1;
-  // let limit = parseInt(req.query.limit) || 10;
-  // if (limit > 50) {
-  //   limit = 10;
-  // }
+  const page = parseInt(req.query.page) || 1;
+  let limit = parseInt(req.query.limit) || 10;
+  if (limit > 50) {
+    limit = 10;
+  }
   try {
     const connectionRequest = await Connection.find({
       $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
@@ -85,8 +94,8 @@ router.get("/user/feed", userAuth, async (req, res) => {
       ],
     })
       .select(USER_SAFE_DATA)
-      // .skip((page - 1) * limit)
-      // .limit(limit);
+      .skip((page - 1) * limit)
+      .limit(limit);
     return res.status(200).json({ message: "feed fetched succefully", feed });
   } catch (error) {
     return res.status(500).json({
@@ -95,5 +104,6 @@ router.get("/user/feed", userAuth, async (req, res) => {
     });
   }
 });
+
 
 module.exports = router;

@@ -9,26 +9,34 @@ import { FaSun, FaMoon } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setUser } from "../fetures/userAuth/userSlice";
 
-const AuthCard = () => {
+const AuthCard = ({ isSignUp = false }) => {
   const { toggleTheme, theme } = useContext(ThemeContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [skills, setSkills] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleLogin = async (event) => {
+  const handleAuth = async (event) => {
     event.preventDefault();
     setIsLoading(true);
 
+    const data = isSignUp
+      ? { email, password, firstName, lastName, skills }
+      : { email, password };
+
+    const endpoint = isSignUp ? "/signup" : "/signin";
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/signin`,
-        { email, password },
+        `${BACKEND_URL}${endpoint}`,
+        data,
         { withCredentials: true }
       );
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         toast.success(response.data.message);
         setIsLoading(false);
         dispatch(setUser(response.data.user));
@@ -46,22 +54,72 @@ const AuthCard = () => {
 
   return (
     <div
-      className={` mt-32 relative card bg-base-200  w-3/12 mx-auto itme transition-colors duration-300 shadow-md `}
+      className={`mt-${isSignUp ? "16" : "32"} relative card bg-base-200 sm:w-8/12 lg:w-${isSignUp ? "6/12" : "1/4"} mx-auto transition-colors duration-300 shadow-md rounded-2xl`}
     >
       <div className="card-body items-center text-center">
         <span className="font-semibold text-xl">
           Welcome to <span className="font-extrabold">dev.</span>
-          <span className="font-extrabold text-blue-400">Tinder</span>
+          <span className="font-extrabold bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
+            Tinder
+          </span>
         </span>
 
-        <form onSubmit={handleLogin} className="w-full">
-          <div className="form-control">
+        <form onSubmit={handleAuth} className="w-full">
+          {isSignUp && (
+            <>
+              <div className="form-control mt-4">
+                <label className="label">
+                  <span className="label-text">First Name</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  placeholder="Enter your first name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-control mt-4">
+                <label className="label">
+                  <span className="label-text">Last Name</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  placeholder="Enter your last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                />
+              </div>
+
+
+              <div className="form-control mt-4">
+                <label className="label">
+                  <span className="label-text">Skills</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  placeholder="Enter skills (comma-separated)"
+                  value={skills}
+                  onChange={(e) => setSkills(e.target.value.split(","))}
+                  required
+                />
+              </div>
+            </>
+          )}
+
+          {/* Common fields for both sign-up and sign-in */}
+          <div className="form-control mt-4">
             <label className="label">
               <span className="label-text">Email</span>
             </label>
             <input
               type="email"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -74,17 +132,18 @@ const AuthCard = () => {
             </label>
             <input
               type="password"
-              className="input input-bordered w-fulldark:border-gray-600"
+              className="input input-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
+
           <div className="card-actions justify-center mt-4">
             <button
               type="submit"
-              className="btn bg-blue-400 hover:bg-blue-500 text-black transition-colors duration-300 w-full"
+              className="btn bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 text-black transition-colors duration-300 w-full"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -104,18 +163,34 @@ const AuthCard = () => {
                   ]}
                 />
               ) : (
-                "Login"
+                isSignUp ? "Sign Up" : "Login"
               )}
             </button>
           </div>
         </form>
+
         <div className="mt-4 text-sm">
-          <p>
-            Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-400 hover:underline">
-              Sign up here
-            </Link>
-          </p>
+          {isSignUp ? (
+            <p>
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 bg-clip-text text-transparent"
+              >
+                Login here
+              </Link>
+            </p>
+          ) : (
+            <p>
+              Don&apos;t have an account?{" "}
+              <Link
+                to="/signup"
+                className="bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 bg-clip-text text-transparent"
+              >
+                Sign up here
+              </Link>
+            </p>
+          )}
         </div>
       </div>
 

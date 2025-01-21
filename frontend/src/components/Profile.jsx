@@ -6,9 +6,8 @@ import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import { BACKEND_URL } from "../constants/constants";
 import { setUser } from "../fetures/userAuth/userSlice";
-import Boy from "../assets/boy_9159781.png";  
-import Girl from "../assets/Girl.png"
-
+import Boy from "../assets/Boy.png";
+import Girl from "../assets/Girl.png";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -22,9 +21,8 @@ const Profile = () => {
     gender: "",
     age: "",
     about: "",
-    skills: [], 
+    skills: [],
   });
-
   const fetchUser = async () => {
     try {
       if (userFromRedux) {
@@ -35,7 +33,7 @@ const Profile = () => {
           gender: userFromRedux?.gender || "Male",
           age: userFromRedux?.age || "",
           about: userFromRedux?.about || "",
-          skills: userFromRedux?.skills || [], 
+          skills: userFromRedux?.skills || [],
         });
         return;
       }
@@ -54,18 +52,22 @@ const Profile = () => {
           about,
           skills: skills || [],
         };
-       
+
         dispatch(setUser(userData));
         setEditData(userData);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error fetching user data.");
+      toast.error(
+        error.response?.data?.message || "Error fetching user data."
+      );
     }
   };
 
   useEffect(() => {
+   
+
     fetchUser();
-  }, [userFromRedux]);
+  }, [userFromRedux, dispatch]);
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -87,14 +89,12 @@ const Profile = () => {
         withCredentials: true,
       });
       if (res.status === 200) {
-        toast.success(res.data.message || "Profile updated successfully!");
         dispatch(setUser(res.data.updatedProfile));
         setIsEditing(false);
         console.log("Updated Profile:", res.data.updatedProfile);
-        
+        toast.success("Profile updated successfully.");
       }
     } catch (error) {
-    
       toast.error(error.response?.data?.message || "Error saving profile.");
     } finally {
       setIsLoading(false);
@@ -106,10 +106,13 @@ const Profile = () => {
       {!isEditing ? (
         <>
           <span className="invisible">Profile</span>
-          <div className="flex flex-col sm:flex-row sm:w-5/6 w-full bg-base-200 p-6 rounded-2xl transition-all duration-300">
+          <div className="flex flex-col sm:flex-row sm:w-6/6 w-full bg-base-200 p-6 rounded-2xl transition-all duration-300 " style={{ minHeight: "450px" }}>
             <div className="flex flex-col items-center sm:w-1/3 w-full text-center sm:text-left mb-6 sm:mb-0 justify-center">
               <img
-                src={editData?.photoUrl ||( editData?.gender=='male'?Boy:Girl)}
+                src={
+                  editData?.photoUrl ||
+                  (editData?.gender == "male" ? Boy : Girl)
+                }
                 alt="Profile"
                 className="w-32 h-32 rounded-full mb-4 border-4 border-gray-300"
               />
@@ -122,7 +125,9 @@ const Profile = () => {
               </button>
             </div>
             <div className="flex flex-col sm:w-2/3 w-full px-4">
-            <h3 className="text-xl   mb-6 font-bold font-sans bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-600">Profile Details</h3>
+              <h3 className="text-2xl   mb-7 font-bold font-sans bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 bg-clip-text text-transparent  hover:bg-gradient-to-r hover:from-cyan-400 hover:via-cyan-600 hover:to-blue-600 mr-1">
+                Profile Details
+              </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <span className="text-sm text-gray-600">First Name:</span>
@@ -167,11 +172,11 @@ const Profile = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 text-green-600 font-bold text-xl  "
+                  className="flex items-center gap-2 font-semibold text-xl  "
                 >
                   <FaSave />
                   {isLoading ? (
-                    <span className="loading loading-spinner text-success"></span>
+                    <span className="loading loading-spinner  "></span>
                   ) : (
                     "save"
                   )}
@@ -279,7 +284,6 @@ const Profile = () => {
           </div>
         </div>
       )}
-      <Toaster position="bottom-center" reverseOrder={false} />
     </div>
   );
 };

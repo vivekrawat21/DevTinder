@@ -1,9 +1,9 @@
 const express = require("express");
 const { validateEditProfileFields } = require("../../utils/validateUser");
-
-
+const User = require("../models/user.model");
 const userAuth = require("../middleware/userAuth.middleware");
-
+const { ObjectId } = require('mongodb');
+const USER_SAFE_DATA = "firstName lastName photoUrl about skills gender age";
 const router = express.Router();
 router.get("/profile/view", userAuth, async (req, res) => {
   try {
@@ -44,4 +44,29 @@ router.patch("/profile/edit", userAuth, async (req, res) => {
   }
 });
 
+router.get("/profile/:userId", userAuth, async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const objectId = new ObjectId(userId);
+    const user = await User.findById(objectId).select(USER_SAFE_DATA);
+   
+    
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      message: "User fetched successfully",
+      user,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server side error occurred",
+      error: error.message,
+    });
+  }
+}
+);
 module.exports = router;

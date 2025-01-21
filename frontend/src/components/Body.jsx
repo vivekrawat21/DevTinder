@@ -37,7 +37,6 @@ const Body = () => {
   return (
     <>
       <NavBar />
-
       <Outlet />
       <FloatingBanner />
       

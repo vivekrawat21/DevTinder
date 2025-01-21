@@ -67,9 +67,13 @@ router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
 });
 
 router.post("/request/review/:status/:requestId",userAuth,async(req, res) => {
-    const loggedInUserId = req.user._id;
+    const loggedInUserId = req.user?._id;
     const { status, requestId } = req.params;
     try {
+      console.log("Request Id:", requestId);
+      if (!status || !requestId) {
+        return res.status(400).json({ message: "Invalid request" });
+      }
       const allowedStatus = ["accepted", "rejected"];
       if (!allowedStatus.includes(status)) {
         return res.status(400).json({ message: "Not a valid status" });

@@ -1,16 +1,16 @@
 import { motion, AnimatePresence } from "framer-motion";
-import Boy from "../assets/boy_9159781.png";
+import PropTypes from "prop-types";
+import Boy from "../assets/Boy.png";
 import Girl from "../assets/Girl.png";
 import { IoIosMale } from "react-icons/io";
 import { IoFemale, IoMaleFemaleOutline } from "react-icons/io5";
 import { MdCake } from "react-icons/md";
 
-
 const UserCard = ({ user, direction, onAction, showActions = true }) => {
   const variants = {
     initial: { x: 0, y: 0, opacity: 1, scale: 1 },
-    interested: { x: -500, opacity: 0, scale: 0.7, backgroundColor: "#ddffdd" },
-    ignored: { x: 500, opacity: 0, scale: 0.7, backgroundColor: "#ffdddd" },
+    interested: { x: -500, opacity: 0, scale: 0.6, backgroundColor: "#ddffdd" },
+    ignored: { x: 500, opacity: 0, scale: 0.6, backgroundColor: "#ffdddd" },
   };
 
   const genderIcon =
@@ -30,27 +30,27 @@ const UserCard = ({ user, direction, onAction, showActions = true }) => {
       : "Others";
 
   return (
-    <div className="flex justify-center items-center mt-10 ">
+    <div className="flex justify-center items-center mt-24">
       <AnimatePresence>
         {user && (
           <motion.div
-            key={user?.id}
+            key={user?._id}
             initial="initial"
             animate={direction ? direction : "initial"}
             variants={variants}
-            transition={{ duration: 0.6 }}
-            className="card shadow-2xl rounded-2xl overflow-hidden w-96 "
+            transition={{ duration: 0.4 }}
+            className="card shadow-2xl rounded-2xl overflow-hidden w-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
           >
             <div className="card-image flex justify-center items-center pt-4">
               <img
-                src={user?.photoUrl || (user?.gender=="male"?Boy:Girl)}
+                src={user?.photoUrl || (user?.gender === "male" ? Boy : Girl)}
                 className="w-40 h-40 rounded-full object-cover"
                 alt="User Profile"
               />
             </div>
             <div className="card-body p-6">
               <h2 className="text-center text-2xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-600">
-                {user?.firstName + " " + user?.lastName || "John Doe"}
+              &lt;{user?.firstName + " " + user?.lastName || "John Doe"}/&gt;
               </h2>
               <div className="flex justify-center items-center gap-7 text-sm mb-3">
                 <div className="flex gap-1">
@@ -84,13 +84,13 @@ const UserCard = ({ user, direction, onAction, showActions = true }) => {
                 <div className="card-actions flex justify-between mt-6">
                   <button
                     onClick={() => onAction("interested", user?._id)}
-                    className="w-5/12 px-3 py-2 rounded-l-xl border border-green-600 text-green-400 hover:bg-green-600 hover:text-white transition-all duration-200"
+                    className="w-5/12 px-3 py-2 rounded-xl border border-pink-400 text-pink-400 transition-all duration-200 transform hover:scale-105 hover:bg-pink-400 hover:text-white focus:ring-2 focus:ring-pink-400 focus:outline-none"
                   >
                     Interested
                   </button>
                   <button
                     onClick={() => onAction("ignored", user?._id)}
-                    className="w-5/12 px-3 py-2 rounded-r-xl border border-red-600 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-200"
+                    className="w-5/12 px-3 py-2 rounded-xl border border-violet-400 text-violet-400 transition-all duration-200 transform hover:scale-105 hover:bg-violet-400 hover:text-white focus:ring-2 focus:ring-violet-400 focus:outline-none"
                   >
                     Ignore
                   </button>
@@ -102,6 +102,24 @@ const UserCard = ({ user, direction, onAction, showActions = true }) => {
       </AnimatePresence>
     </div>
   );
+};
+
+
+UserCard.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.string,
+    gender: PropTypes.string,
+    photoUrl: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    age: PropTypes.number,
+    about: PropTypes.string,
+    skills: PropTypes.arrayOf(PropTypes.string),
+    _id: PropTypes.string,
+  }),
+  direction: PropTypes.string,
+  onAction: PropTypes.func,
+  showActions: PropTypes.bool,
 };
 
 export default UserCard;

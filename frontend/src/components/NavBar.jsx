@@ -5,33 +5,51 @@ import { useSelector, useDispatch } from "react-redux";
 import { FaSun, FaMoon, FaHamburger } from "react-icons/fa";
 import { HiUserCircle } from "react-icons/hi";
 import { logoutUser } from "../fetures/userAuth/userSlice";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { BACKEND_URL } from "../constants/constants";
 import axios from "axios";
 import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineFeed } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { TbLogout2 } from "react-icons/tb";
+import { LiaUserFriendsSolid } from "react-icons/lia";
+import { useState } from "react";
+import {clearFeed} from "../fetures/userFeed/feedSlice"
+import { clearRequests } from "../fetures/requests/requestsSlice";
+import { clearConnections } from "../fetures/connections/connectionsSlice";
+
 
 const NavBar = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
+  const [Loading, setLoading] = useState(false);
+
 
   const handleLogout = async () => {
     try {
+      setLoading(true);
+
       const response = await axios.get(`${BACKEND_URL}/signout`, {
         withCredentials: true,
       });
 
       if (response.status === 200) {
+       
         toast.success(response.data.message);
         dispatch(logoutUser());
+        dispatch(clearFeed());
+        dispatch(clearRequests());
+        dispatch(clearConnections());
         navigate("/login");
+        setLoading(false);
       }
     } catch (error) {
-      toast.error("Network error. Please try again." + error);
+      console.log("Failed to logout", error);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -41,7 +59,7 @@ const NavBar = () => {
         <Link to="/" className="text-xl flex items-center space-x-2">
           <span className="font-extrabold">
             dev
-            <span className="font-extrabold text-blue-400">.Tinder</span>
+            <span className="font-extrabold bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500   bg-clip-text text-transparent">.Tinder</span>
           </span>
         </Link>
       </div>
@@ -131,6 +149,11 @@ const NavBar = () => {
                 <FaUserFriends className="w-10" />
               </Link>
             </li>
+            <li className="text-lg  cursor-pointer">
+              <Link to="/requests">
+              <LiaUserFriendsSolid className="w-10" />
+              </Link>
+            </li>
             <li>
               <button
                 onClick={handleLogout}
@@ -159,23 +182,33 @@ const NavBar = () => {
           <ul className="dropdown-content menu sm:p-2 rounded-box p-0 shadow-lg bg-base-100  mt-2 ">
             <li>
               <Link to="/profile">
-              <CgProfile className="inline-block" />  Profile
+                <CgProfile className="inline-block" /> Profile
               </Link>
             </li>
             <li>
-              <Link to="/"><MdOutlineFeed className="inline-block"/> Feed </Link>
+              <Link to="/">
+                <MdOutlineFeed className="inline-block" /> Feed{" "}
+              </Link>
             </li>
             <li>
-              <Link to="/connections"> <FaUserFriends className="inline-block"/> Connections</Link>
+              <Link to="/connections">
+                
+                <FaUserFriends className="inline-block" /> Connections
+              </Link>
             </li>
             <li>
-              <button onClick={handleLogout} className="text-red-500">
-              <TbLogout2 className="inline-block"/>  Logout
+              <Link to="/requests"><LiaUserFriendsSolid className="inline-block" /> Requests</Link>
+            </li>
+            <hr className="w-[80%] opacity-15 ml-auto mr-auto mt-3" />
+            <li>
+              <button onClick={handleLogout} className="text-red-500 ml-auto mr-auto">
+                <TbLogout2 className="inline-block" /> {Loading ? (<span className="loading loading-spinner text-error"></span>) : "Logout"}
               </button>
             </li>
           </ul>
         </div>
       </div>
+      <Toaster  />
     </div>
   );
 };
