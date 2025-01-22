@@ -8,6 +8,10 @@ import ThemeContext from "../contexts/ThemeContext";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setUser } from "../fetures/userAuth/userSlice";
+import { FaRegEyeSlash } from "react-icons/fa6";
+import { FaRegEye } from "react-icons/fa6";
+
+
 
 const AuthCard = ({ isSignUp = false }) => {
   const { toggleTheme, theme } = useContext(ThemeContext);
@@ -19,8 +23,11 @@ const AuthCard = ({ isSignUp = false }) => {
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
 
   const handleAuth = async (event) => {
     event.preventDefault();
@@ -60,7 +67,9 @@ const AuthCard = ({ isSignUp = false }) => {
 
   return (
     <div
-      className={`mt-${isSignUp ? "4" : "32"} relative card bg-base-200 sm:w-8/12 lg:w-${isSignUp ? "6/12" : "1/4"} mx-auto transition-colors duration-300 shadow-md rounded-2xl mb-8`}
+      className={`relative card bg-base-200 mx-auto transition-colors duration-300 shadow-md rounded-2xl mb-8 ${
+  isSignUp ? 'mt-3 lg:w-6/12 ' : 'mt-32 lg:w-1/4'
+} sm:w-8/12`}
     >
       <div className="card-body items-center text-center">
         <span className="font-semibold text-xl">
@@ -164,18 +173,26 @@ const AuthCard = ({ isSignUp = false }) => {
               required
             />
           </div>
-          <div className="form-control mt-4">
+          <div className="form-control mt-4 </input> relative">
             <label className="label">
               <span className="label-text">Password</span>
             </label>
             <input
-              type="password"
-              className="input input-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              type={showPassword ? "text" : "password"}
+              className="input input-bordered w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 relative "
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute   right-4  top-[3.2rem] "
+            >
+              {showPassword ? <FaRegEye  className="text-cyan-500"/>:<FaRegEyeSlash className="text-cyan-500"/>}
+            </button>
+           
           </div>
 
           <div className="card-actions justify-center mt-4">

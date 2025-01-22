@@ -14,7 +14,7 @@ const Login = () => {
    }, [])
   return (
    <div className="flex justify-center items-center">
-      <AuthCard/>
+      <AuthCard isSignUp={false}/>
    </div>
   )
 }
