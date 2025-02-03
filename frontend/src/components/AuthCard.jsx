@@ -58,7 +58,7 @@ const AuthCard = ({ isSignUp = false }) => {
       }
 
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
+      toast.error(error.response?.data?.message || error.response?.data?.error  ||error.message);
     } finally {
       setIsLoading(false);
     }
@@ -159,7 +159,7 @@ const AuthCard = ({ isSignUp = false }) => {
             </>
           )}
 
-          {/* Common fields for both sign-up and sign-in */}
+    
           <div className="form-control mt-4">
             <label className="label">
               <span className="label-text">Email</span>
