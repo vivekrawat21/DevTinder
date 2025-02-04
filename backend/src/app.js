@@ -23,10 +23,10 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 
 // Routers
-app.use("/api/auth", authRouter);
-app.use("/api/profile", profileRouter);
-app.use("/api/connection", requestRouter);
-app.use("/api/user", userRouter);
+app.use("/api/", authRouter);
+app.use("/api/", profileRouter);
+app.use("/api/", requestRouter);
+app.use("/api/", userRouter);
 
 // Database Connection
 connectDB()
