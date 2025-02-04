@@ -52,8 +52,8 @@ router.post("/signin", async (req, res) => {
     const token = await user.getJWT();
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none', 
+      secure: true,
+      sameSite: "Lax",
       expires: new Date(Date.now() + 24 * 3600000), 
 
     });
