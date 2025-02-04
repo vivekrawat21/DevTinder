@@ -53,7 +53,7 @@ router.post("/signin", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none', // For cross-origin requests
+      sameSite: 'none', 
       domain: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'localhost',
       expires: new Date(Date.now() + 24 * 3600000), // 24 hours
     });
