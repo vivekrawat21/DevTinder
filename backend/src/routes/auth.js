@@ -51,6 +51,10 @@ router.post("/signin", async (req, res) => {
 
     const token = await user.getJWT();
     res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none', // For cross-origin requests
+      domain: process.env.NODE_ENV === 'production' ? '.yourdomain.com' : 'localhost',
       expires: new Date(Date.now() + 24 * 3600000), // 24 hours
     });
 
