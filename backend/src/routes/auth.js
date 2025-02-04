@@ -54,7 +54,7 @@ router.post("/signin", async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none', 
-      domain: process.env.NODE_ENV === 'production' ? 'https://dev-tinder-umber.vercel.app' : 'localhost',
+      domain: process.env.NODE_ENV === 'production' ? 'https://dev-tinder-backend-nu.vercel.app/' : 'localhost',
       expires: new Date(Date.now() + 24 * 3600000), 
 
     });
