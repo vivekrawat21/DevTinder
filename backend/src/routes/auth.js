@@ -54,7 +54,7 @@ router.post("/signin", async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none', // For cross-origin requests
-      domain: process.env.NODE_ENV === 'production' ? '.yourdomain.com' : 'localhost',
+      domain: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'localhost',
       expires: new Date(Date.now() + 24 * 3600000), // 24 hours
     });
 
