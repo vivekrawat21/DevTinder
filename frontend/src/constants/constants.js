@@ -1,3 +1,3 @@
-const BACKEND_URL = 'https://dev-tinder-api-steel.vercel.app/api';
+const BACKEND_URL = 'https://dev-tinder-backend-nu.vercel.app/api';
 
 export { BACKEND_URL };
