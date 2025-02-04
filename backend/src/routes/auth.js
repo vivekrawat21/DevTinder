@@ -55,7 +55,7 @@ router.post("/signin", async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none', 
       domain: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'localhost',
-      expires: new Date(Date.now() + 24 * 3600000), // 24 hours
+      expires: new Date(Date.now() + 24 * 3600000), 
     });
 
     return res.status(200).json({
