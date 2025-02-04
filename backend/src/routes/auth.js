@@ -51,11 +51,7 @@ router.post("/signin", async (req, res) => {
 
     const token = await user.getJWT();
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Lax",
-      expires: new Date(Date.now() + 24 * 3600000), 
-
+      expires: new Date(Date.now() + 24 * 3600000), // 24 hours
     });
 
     return res.status(200).json({

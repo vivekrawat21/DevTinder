@@ -1,14 +1,13 @@
 const express = require("express");
-const connectDB = require("./config/dbConfig");
+const connectDb = require("./config/dbConfig");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
-const cors = require("cors");
-const serverless = require("serverless-http"); // ✅ Import serverless-http
 
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/connection");
 const userRouter = require("./routes/user");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -22,26 +21,21 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
 
-// Routers
+// routers
 app.use("/api/", authRouter);
 app.use("/api/", profileRouter);
 app.use("/api/", requestRouter);
 app.use("/api/", userRouter);
 
-// Database Connection
-connectDB()
+// Database Connection and Server Start
+
+connectDb()
   .then(() => {
-    console.log("✅ Database connected successfully");
+    console.log("Database connection successful");
+    app.listen(process.env.PORT, () => {
+      console.log(`App is listening on port: ${process.env.PORT}`);
+    });
   })
   .catch((err) => {
-    console.error("❌ Error connecting to DB:", err.message);
+    console.error("Error while connecting to DB: " + err.message);
   });
-
-// Sample API route
-app.get("/", (req, res) => {
-  res.json({ message: "Hello from Vercel with MongoDB!" });
-});
-
-// Export app as a serverless function
-module.exports = app;
-module.exports.handler = serverless(app);
