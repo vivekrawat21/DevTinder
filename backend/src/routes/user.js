@@ -105,5 +105,5 @@ router.get("/user/feed", userAuth, async (req, res) => {
   }
 });
 
-z
+
 module.exports = router;

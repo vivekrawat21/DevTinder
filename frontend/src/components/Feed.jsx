@@ -50,7 +50,7 @@ const Feed = () => {
     }
   };
 
-  if (feed.length === 0) {
+  if (feed.length==0) {
     return <h1 className="text-center text-3xl font-bold mt-40 ">Nothing in the feed to show ;)</h1>;
   }
 
