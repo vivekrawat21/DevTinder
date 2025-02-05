@@ -54,7 +54,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="navbar bg-base-200 dark:bg-gray-800 shadow-xl mb-4 transition-colors duration-500 ease-in-out mt-4 max-w-7xl mx-auto rounded-lg backdrop-blur-md bg-opacity-30 ">
+    <div className="navbar bg-base-200 dark:bg-gray-800 shadow-xl mb-4 transition-colors duration-500 ease-in-out mt-4 max-w-7xl mx-auto rounded-lg backdrop-blur-md bg-opacity-60  sticky top-0 z-50"> 
       <div className="navbar-start">
         <Link to="/" className="text-xl flex items-center space-x-2">
           <span className="font-extrabold">
