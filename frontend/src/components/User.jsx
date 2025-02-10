@@ -12,7 +12,7 @@ const User = () => {
 
   const fetchUser =  async() => {
     try {
-        const response = await axios.get(`${BACKEND_URL}/profile/${id}`, {
+        const response = await axios.get(`${BACKEND_URL}/api/profile/${id}`, {
             withCredentials: true,
         })
         console.log(response.data.user);

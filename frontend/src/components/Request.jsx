@@ -16,7 +16,7 @@ const Request = () => {
   const acceptRequest = async (requestId) => {
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/request/review/accepted/${requestId}`,
+        `${BACKEND_URL}/api/request/review/accepted/${requestId}`,
         {},
         { withCredentials: true }
       );
@@ -34,7 +34,7 @@ const Request = () => {
   const rejectRequest = async (requestId) => { 
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/request/review/rejected/${requestId}`,
+        `${BACKEND_URL}/api/request/review/rejected/${requestId}`,
         {},
         { withCredentials: true }
       );
@@ -64,7 +64,7 @@ const Request = () => {
 
   const fetchRequests = async () => { 
     try {
-      const response = await axios.get(`${BACKEND_URL}/user/requests/received`,{
+      const response = await axios.get(`${BACKEND_URL}/api/user/requests/received`,{
         withCredentials: true
       });
       if (response.status === 200) {

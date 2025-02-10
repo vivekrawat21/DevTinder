@@ -37,7 +37,7 @@ const Profile = () => {
         });
         return;
       }
-      const res = await axios.get(`${BACKEND_URL}/profile/view`, {
+      const res = await axios.get(`${BACKEND_URL}/api/profile/view`, {
         withCredentials: true,
       });
       if (res.status === 200) {
@@ -85,7 +85,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const res = await axios.patch(`${BACKEND_URL}/profile/edit`, editData, {
+      const res = await axios.patch(`${BACKEND_URL}/api/profile/edit`, editData, {
         withCredentials: true,
       });
       if (res.status === 200) {

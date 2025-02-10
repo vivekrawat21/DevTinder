@@ -42,9 +42,10 @@ const FriendCard = ({ connection, isRequest, onAccept, onReject, requestId }) =>
               Connected on: {new Date(connection?.connectionCreatedAt).toLocaleString()}
             </p>
           )}
+
         </div>
 
-        {isRequest && (
+        {isRequest ? (
           <div className="flex justify-between mt-4 w-full">
             <button
               onClick={() => onAccept(requestId)}
@@ -58,6 +59,17 @@ const FriendCard = ({ connection, isRequest, onAccept, onReject, requestId }) =>
             >
               Reject
             </button>
+          </div>
+        ):(
+          <div className="flex justify-center mt-4 w-full">
+            <Link to={`/chat/${connection?._id}`}>
+            <button
+              className="btn btn-sm px-4 py-2 font-medium rounded-xl border border-pink-400 text-pink-400 transition-transform transform hover:scale-110 focus:ring-2 focus:ring-pink-400 focus:outline-none"
+              
+            >
+              Message
+            </button>
+            </Link>
           </div>
         )}
       </div>

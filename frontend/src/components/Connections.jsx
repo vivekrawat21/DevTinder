@@ -12,7 +12,7 @@ const Connections = () => {
 
   const fetchConnections = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/user/connections`, {
+      const response = await axios.get(`${BACKEND_URL}/api/user/connections`, {
         withCredentials: true,
       });
       if (response.status === 200) {

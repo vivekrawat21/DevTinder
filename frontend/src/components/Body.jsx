@@ -17,7 +17,7 @@ const Body = () => {
       if(userFromRedux?.user) {
         return;
       }
-      const res = await axios.get(`${BACKEND_URL}/profile/view`, {
+      const res = await axios.get(`${BACKEND_URL}/api/profile/view`, {
         withCredentials: true,
       });
       dispatch(setUser(res?.data?.user));

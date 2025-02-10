@@ -31,7 +31,7 @@ const NavBar = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(`${BACKEND_URL}/signout`, {
+      const response = await axios.get(`${BACKEND_URL}/api/signout`, {
         withCredentials: true,
       });
 

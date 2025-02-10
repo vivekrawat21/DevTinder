@@ -8,6 +8,7 @@ import Connections from "./components/Connections";
 import SignUp from "./components/SingUp";
 import Request from "./components/Request";
 import User from "./components/User";
+import Chat from "./components/Chat";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
            <Route path="/profile" element={<Profile />}/>
            <Route path="/user/:id" element={<User />}/>
            <Route path="/connections" element={<Connections />}/>
+           <Route path="/chat/:toUserId" element={<Chat/>}/>
            <Route path="/requests" element={<Request />}/>
            </Route>
          
