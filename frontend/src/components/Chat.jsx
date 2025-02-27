@@ -3,6 +3,10 @@ import { FaPaperPlane } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import createSocketConnection from "../../utils/socket";
+import axios from "axios";
+import { BACKEND_URL } from "../constants/constants"
+import boy from "../assets/Boy.png"
+
 
 const socket = createSocketConnection(); // Ensure socket is initialized once
 
@@ -12,6 +16,26 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const user = useSelector((state) => state.user);
   const userId = user?._id;
+
+  const fetchChat = async () => {
+    const res = await axios.get(`${BACKEND_URL}/api/chat/${toUserId}`,{
+      withCredentials:true
+
+    });
+   
+
+
+    
+
+    // setMessages(res.data?.text)
+    setMessages(res.data.chat.messages)
+    console.log(res.data.chat.messages)
+  }
+
+
+  useEffect(()=>{
+    fetchChat();
+  },[])
 
   useEffect(() => {
     if (!userId || !user?.firstName) return;
@@ -62,26 +86,29 @@ const Chat = () => {
     <div className="flex flex-col border h-[80vh] w-[50vw] rounded-xl p-4 shadow-lg m-auto mt-10">
       <div className="flex items-center justify-between mb-2 p-2 rounded-t-xl">
         <div className="flex items-center">
-          <img src="../assets/Boy.png" className="rounded-full border border-white w-10 h-10 mr-2" />
-          <h1 className="text-lg font-semibold">{toUserId}</h1>
+          <img src={boy}
+          className="rounded-full border border-white w-10 h-10 mr-2" />
+          <h1 className="text-lg font-semibold">{messages[0]?.senderId?.firstName +" "+messages[0]?.senderId?.lastName}</h1>
         </div>
         <span className="text-green-500 font-semibold">Online</span>
       </div>
       <hr className="mb-2" />
       <div className="flex flex-col flex-grow overflow-y-auto space-y-2 p-2">
         {messages.map((msg, index) => (
-          <div key={index} className={`chat ${msg.sender === userId ? "chat-end" : "chat-start"}`}>
+          <div key={index} className={`chat ${msg?.senderId?._id === userId ? "chat-end" : "chat-start"}`}>
             <div className="chat-image avatar">
               <div className="w-10 rounded-full">
                 <img
                   alt="Avatar"
-                  src={msg.sender === userId ? user?.photoUrl : "sender-profile-url"}
+                  src={ 
+                    msg.senderId?._id === userId ? user?.photoUrl? user?.photoUrl:boy : msg?.senderId?.photoUrl? msg?.senderId.photoUrl :boy
+                  }
                 />
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-semibold mb-1">{msg.sender === userId ? "You" : toUserId}</span>
-              <div className="chat-bubble">{msg.text}</div>
+              <span className="text-sm font-semibold mb-1">{msg?.senderId?._id === userId ? "You" : msg?.senderId?.firstName+" "+ msg?.senderId?.lastName} </span>
+              <div className="chat-bubble">{msg?.text}</div>
             </div>
           </div>
         ))}
