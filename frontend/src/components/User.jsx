@@ -4,6 +4,7 @@ import Girl from "../assets/Girl.png";
 import { useEffect,useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../constants/constants";
+import getToken from "../constants/getToken.js";
 
 const User = () => {
   const { id } = useParams();
@@ -12,8 +13,12 @@ const User = () => {
 
   const fetchUser =  async() => {
     try {
+      const token = getToken("token");
         const response = await axios.get(`${BACKEND_URL}/api/profile/${id}`, {
             withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         })
         console.log(response.data.user);
         setUserData(response.data.user);

@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaEdit, FaArrowLeft, FaSave } from "react-icons/fa";
 import UserCard from "./userCard";
-import { Toaster, toast } from "react-hot-toast";
+import {  toast } from "react-hot-toast";
 import axios from "axios";
 import { BACKEND_URL } from "../constants/constants";
 import { setUser } from "../fetures/userAuth/userSlice";
 import Boy from "../assets/Boy.png";
 import Girl from "../assets/Girl.png";
+import getToken from "../constants/getToken.js";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -37,8 +38,12 @@ const Profile = () => {
         });
         return;
       }
+      const token = getToken("token");
       const res = await axios.get(`${BACKEND_URL}/api/profile/view`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (res.status === 200) {
         const { firstName, lastName, photoUrl, gender, age, about, skills } =
@@ -85,8 +90,13 @@ const Profile = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
+      const token = getToken("token");
       const res = await axios.patch(`${BACKEND_URL}/api/profile/edit`, editData, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+
       });
       if (res.status === 200) {
         dispatch(setUser(res.data.updatedProfile));

@@ -6,7 +6,7 @@ import FriendCard from "./FriendCard";
 import { BACKEND_URL } from "../constants/constants";
 import axios from "axios";
 import Friend from "../assets/request.png";
-
+import getToken from "../constants/getToken.js";
 
 const Request = () => {
   const dispatch = useDispatch();
@@ -15,10 +15,15 @@ const Request = () => {
 
   const acceptRequest = async (requestId) => {
     try {
+      const token = getToken("token");
       const response = await axios.post(
         `${BACKEND_URL}/api/request/review/accepted/${requestId}`,
         {},
-        { withCredentials: true }
+        {  withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       console.log("Response:", response);
@@ -33,10 +38,15 @@ const Request = () => {
 
   const rejectRequest = async (requestId) => { 
     try {
+      const  token = getToken("token")
       const response = await axios.post(
         `${BACKEND_URL}/api/request/review/rejected/${requestId}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+         }
       );
       console.log("Response:", response);
       if (response.status === 200) {

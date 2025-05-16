@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserCard from "./userCard";
 import { BACKEND_URL } from "../constants/constants";
 import { setFeed, removeFromFeed } from "../fetures/userFeed/feedSlice";
+import getToken from "../constants/getToken.js";
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -13,8 +14,12 @@ const Feed = () => {
 
   const fetchFeed = async () => {
     try {
+      const token = getToken("token");
       const response = await axios.get(`${BACKEND_URL}/api/user/feed`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       console.log(response.data.feed);
       dispatch(setFeed(response.data.feed));

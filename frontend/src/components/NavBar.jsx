@@ -17,7 +17,7 @@ import { useState } from "react";
 import {clearFeed} from "../fetures/userFeed/feedSlice"
 import { clearRequests } from "../fetures/requests/requestsSlice";
 import { clearConnections } from "../fetures/connections/connectionsSlice";
-
+import getToken from "../constants/getToken.js";
 
 const NavBar = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);
@@ -30,9 +30,13 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       setLoading(true);
+      const token = getToken("token");
 
       const response = await axios.get(`${BACKEND_URL}/api/signout`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.status === 200) {

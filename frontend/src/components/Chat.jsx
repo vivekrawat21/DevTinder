@@ -6,6 +6,7 @@ import createSocketConnection from "../../utils/socket";
 import axios from "axios";
 import { BACKEND_URL } from "../constants/constants"
 import boy from "../assets/Boy.png"
+import getToken from "../constants/getToken.js";
 
 
 const socket = createSocketConnection(); // Ensure socket is initialized once
@@ -18,8 +19,12 @@ const Chat = () => {
   const userId = user?._id;
 
   const fetchChat = async () => {
+    const token = getToken("token");
     const res = await axios.get(`${BACKEND_URL}/api/chat/${toUserId}`,{
-      withCredentials:true
+      withCredentials:true,
+      headers:{
+        Authorization: `Bearer ${token}`,
+      }
 
     });
    

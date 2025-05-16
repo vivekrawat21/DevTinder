@@ -44,6 +44,12 @@ const AuthCard = ({ isSignUp = false }) => {
         data,
         { withCredentials: true }
       );
+      if(endpoint === "/signin"){
+        const token = response.data.token;
+
+        localStorage.setItem("token", token);
+  
+      }
 
       if (response.status === 200 && !isSignUp) {
         toast.success(response.data.message);

@@ -5,6 +5,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../constants/constants";
 import FriendCard from "./FriendCard";
 import Connection from "../assets/connection.png"
+import getToken from "../constants/getToken.js";
 
 const Connections = () => {
   const dispatch = useDispatch();
@@ -12,8 +13,12 @@ const Connections = () => {
 
   const fetchConnections = async () => {
     try {
+      const token = getToken("token");
       const response = await axios.get(`${BACKEND_URL}/api/user/connections`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.status === 200) {
         console.log(response.data.data);
