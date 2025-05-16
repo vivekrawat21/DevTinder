@@ -74,7 +74,11 @@ const Request = () => {
 
   const fetchRequests = async () => { 
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/user/requests/received`,{
+      const token = getToken("token");
+      const response = await axios.get(`${BACKEND_URL}/user/requests/received`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         withCredentials: true
       });
       if (response.status === 200) {

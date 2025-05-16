@@ -91,7 +91,7 @@ const Profile = () => {
     try {
       setIsLoading(true);
       const token = getToken("token");
-      const res = await axios.patch(`${BACKEND_URL}/api/profile/edit`, editData, {
+      const res = await axios.patch(`${BACKEND_URL}/profile/edit`, editData, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,

@@ -14,7 +14,7 @@ const Connections = () => {
   const fetchConnections = async () => {
     try {
       const token = getToken("token");
-      const response = await axios.get(`${BACKEND_URL}/api/user/connections`, {
+      const response = await axios.get(`${BACKEND_URL}/user/connections`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
