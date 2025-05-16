@@ -53,8 +53,8 @@ router.post("/signin", async (req, res) => {
     res.cookie("token", token, {
       expires: new Date(Date.now() + 24 * 3600000), // 24 hours
     });
-
     return res.status(200).json({
+      token:token,
       message: "User login successful",
       user: transformUser(user), // Exclude password
     });
