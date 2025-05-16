@@ -20,7 +20,7 @@ const Chat = () => {
 
   const fetchChat = async () => {
     const token = getToken("token");
-    const res = await axios.get(`${BACKEND_URL}/api/chat/${toUserId}`,{
+    const res = await axios.get(`${BACKEND_URL}/chat/${toUserId}`,{
       withCredentials:true,
       headers:{
         Authorization: `Bearer ${token}`,

@@ -32,7 +32,7 @@ const NavBar = () => {
       setLoading(true);
       const token = getToken("token");
 
-      const response = await axios.get(`${BACKEND_URL}/api/signout`, {
+      const response = await axios.get(`${BACKEND_URL}/signout`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,

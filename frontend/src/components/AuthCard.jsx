@@ -40,7 +40,7 @@ const AuthCard = ({ isSignUp = false }) => {
     const endpoint = isSignUp ? "/signup" : "/signin";
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/api${endpoint}`,
+        `${BACKEND_URL}/${endpoint}`,
         data,
         { withCredentials: true }
       );

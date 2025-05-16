@@ -14,7 +14,7 @@ const User = () => {
   const fetchUser =  async() => {
     try {
       const token = getToken("token");
-        const response = await axios.get(`${BACKEND_URL}/api/profile/${id}`, {
+        const response = await axios.get(`${BACKEND_URL}/profile/${id}`, {
             withCredentials: true,
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -15,7 +15,7 @@ const Feed = () => {
   const fetchFeed = async () => {
     try {
       const token = getToken("token");
-      const response = await axios.get(`${BACKEND_URL}/api/user/feed`, {
+      const response = await axios.get(`${BACKEND_URL}/user/feed`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,

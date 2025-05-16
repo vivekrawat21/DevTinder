@@ -40,7 +40,7 @@ const Request = () => {
     try {
       const  token = getToken("token")
       const response = await axios.post(
-        `${BACKEND_URL}/api/request/review/rejected/${requestId}`,
+        `${BACKEND_URL}/request/review/rejected/${requestId}`,
         {},
         { withCredentials: true,
           headers: {

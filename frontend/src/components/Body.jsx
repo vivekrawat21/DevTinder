@@ -22,7 +22,7 @@ const Body = () => {
       }
       const token = getToken("token");
 
-      const res = await axios.get(`${BACKEND_URL}/api/profile/view`, {
+      const res = await axios.get(`${BACKEND_URL}/profile/view`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
