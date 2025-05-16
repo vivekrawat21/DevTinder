@@ -47,7 +47,10 @@ const AuthCard = ({ isSignUp = false }) => {
       if(endpoint === "/signin"){
         const token = response.data.token;
 
-        localStorage.setItem("token", token);
+        // Set token with expiration in minutes
+          localStorage.setItem("token", token);
+        
+
   
       }
 

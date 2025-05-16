@@ -35,32 +35,35 @@ const Feed = () => {
   const handleAction = async (action, userId) => {
     try {
       setDirection(action);
-      const updatedFeed = feed.filter(user => user._id !== userId); 
+      const updatedFeed = feed.filter((user) => user._id !== userId);
       dispatch(removeFromFeed({ _id: userId }));
-
+  
       setTimeout(() => {
-        setCurrentIndex((prev) => (prev >= updatedFeed.length ? 0 : prev)); 
+        setCurrentIndex((prev) => (prev >= updatedFeed.length ? 0 : prev));
         setDirection(null);
       }, 600);
-
+  
       const token = getToken("token");
+      if (!token) {
+        console.error("Token missing!");
+        return;
+      }
+  
       await axios.post(
         `${BACKEND_URL}/request/send/${action}/${userId}`,
+        {}, // <-- empty data
         {
-          withCredentials: true,
-          headers:{
+          headers: {
             Authorization: `Bearer ${token}`,
-          }
+          },
+          withCredentials: true,
         }
       );
     } catch (error) {
       console.error("Error sending action:", error.message);
     }
   };
-
-  if (feed.length==0) {
-    return <h1 className="text-center text-3xl font-bold mt-40 ">Nothing in the feed to show ;)</h1>;
-  }
+  
 
   return (
     <div>

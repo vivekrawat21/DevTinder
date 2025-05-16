@@ -17,12 +17,14 @@ const Request = () => {
     try {
       const token = getToken("token");
       const response = await axios.post(
-        `${BACKEND_URL}/api/request/review/accepted/${requestId}`,
+        `${BACKEND_URL}/request/review/accepted/${requestId}`,
         {},
-        {  withCredentials: true,
+        {   
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          Authorization: `Bearer ${token}`,
+        },
+         withCredentials: true,
+        
         }
       );
 
@@ -42,11 +44,11 @@ const Request = () => {
       const response = await axios.post(
         `${BACKEND_URL}/request/review/rejected/${requestId}`,
         {},
-        { withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-         }
+        {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,   }
       );
       console.log("Response:", response);
       if (response.status === 200) {
@@ -76,10 +78,11 @@ const Request = () => {
     try {
       const token = getToken("token");
       const response = await axios.get(`${BACKEND_URL}/user/requests/received`,{
+       
+        withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true
       });
       if (response.status === 200) {
         dispatch(addRequest(response.data.requests));

@@ -14,7 +14,7 @@ const SignUp = () => {
    }, [])
   return (
    <div className="flex justify-center items-center">
-      <AuthCard isSignUp={true}/>
+    <AuthCard isSignUp={true}/>
    </div>
   )
 }
