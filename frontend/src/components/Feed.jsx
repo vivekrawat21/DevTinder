@@ -43,11 +43,14 @@ const Feed = () => {
         setDirection(null);
       }, 600);
 
+      const token = getToken("token");
       await axios.post(
         `${BACKEND_URL}/request/send/${action}/${userId}`,
-        {},
         {
           withCredentials: true,
+          headers:{
+            Authorization: `Bearer ${token}`,
+          }
         }
       );
     } catch (error) {
